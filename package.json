@@ -2,7 +2,7 @@
   "name": "@stationfive/tedious-ext",
   "version": "0.0.3",
   "description": "Extensions for tedious.js",
-  "main": "dist/bundle.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
