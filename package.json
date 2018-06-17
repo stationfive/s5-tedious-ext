@@ -1,12 +1,16 @@
 {
   "name": "@stationfive/tedious-ext",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Extensions for tedious.js",
-  "main": "index.js",
+  "main": "dist/bundle.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test-unit": "jest",
     "test": "NODE_ENV=test npm run check && npm run test-unit",
-    "check": "eslint ."
+    "check": "eslint .",
+    "build": "webpack ."
   },
   "repository": {
     "type": "git",
@@ -28,11 +32,23 @@
     "lodash": "4.17.10",
     "tedious": "2.6.1"
   },
+  "peerDependencies": {
+    "lodash": "4.17.10",
+    "tedious": "2.6.1"
+  },
   "devDependencies": {
-    "jest": "23.1.0",
+    "babel-core": "6.26.3",
+    "babel-loader": "7.1.4",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.7.0",
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.12.0",
-    "eslint-plugin-jest": "21.17.0"
+    "eslint-plugin-jest": "21.17.0",
+    "jest": "23.0.1",
+    "uglifyjs-webpack-plugin": "1.2.5",
+    "webpack": "4.10.1",
+    "webpack-cli": "3.0.8",
+    "webpack-node-externals": "1.7.2"
   }
 }
