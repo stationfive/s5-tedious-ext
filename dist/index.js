@@ -81,19 +81,90 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./dist/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./dist/index.js":
-/*!***********************!*\
-  !*** ./dist/index.js ***!
-  \***********************/
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nconst mapReduceSqlRows = __webpack_require__(/*! ./src/mapReduceSqlRows */ \"./src/mapReduceSqlRows.js\");\nconst addSqlParamsToRequest = __webpack_require__(/*! ./src/addSqlParamsToRequest */ \"./src/addSqlParamsToRequest.js\");\nconst promisifyTediousExecSql = __webpack_require__(/*! ./src/promisifyTediousExecSql */ \"./src/promisifyTediousExecSql.js\");\nconst addParam = __webpack_require__(/*! ./src/addParams */ \"./src/addParams.js\");\n\nmodule.exports = {\n  mapReduceSqlRows,\n  addSqlParamsToRequest,\n  promisifyTediousExecSql,\n  addParam\n};\n\n//# sourceURL=webpack:///./index.js?");
+
+/***/ }),
+
+/***/ "./src/addParams.js":
+/*!**************************!*\
+  !*** ./src/addParams.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nmodule.exports = (name, type, value) => ({\n  name,\n  type,\n  value\n});\n\n//# sourceURL=webpack:///./src/addParams.js?");
+
+/***/ }),
+
+/***/ "./src/addSqlParamsToRequest.js":
+/*!**************************************!*\
+  !*** ./src/addSqlParamsToRequest.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nconst addSqlParamsToRequest = (sqlParams, request) => {\n  sqlParams.forEach(param => {\n    request.addParameter(param.name, param.type, param.value);\n  });\n};\nmodule.exports = addSqlParamsToRequest;\n\n//# sourceURL=webpack:///./src/addSqlParamsToRequest.js?");
+
+/***/ }),
+
+/***/ "./src/mapReduceSqlRows.js":
+/*!*********************************!*\
+  !*** ./src/mapReduceSqlRows.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };\n\nconst _ = __webpack_require__(/*! lodash */ \"lodash\");\n\nconst mapReduceSqlRows = rows => rows.map(row => row.reduce((prev, curr) => _extends({}, prev, { [_.camelCase(curr.metadata.colName)]: curr.value\n}), {}));\nmodule.exports = mapReduceSqlRows;\n\n//# sourceURL=webpack:///./src/mapReduceSqlRows.js?");
+
+/***/ }),
+
+/***/ "./src/promisifyTediousExecSql.js":
+/*!****************************************!*\
+  !*** ./src/promisifyTediousExecSql.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nconst sql = __webpack_require__(/*! tedious */ \"tedious\");\nconst mapReduceSqlRows = __webpack_require__(/*! ./mapReduceSqlRows */ \"./src/mapReduceSqlRows.js\");\nconst addSqlParamsToRequest = __webpack_require__(/*! ./addSqlParamsToRequest */ \"./src/addSqlParamsToRequest.js\");\n\nconst promisifyTediousExecSql = (connection, query, params = null) => new Promise((resolve, reject) => {\n  const sqlCallback = (err, rowCount, rows) => {\n    if (err) {\n      reject(err);\n    } else {\n      const results = mapReduceSqlRows(rows);\n      resolve(results);\n    }\n  };\n  const request = new sql.Request(query, sqlCallback);\n  if (params) {\n    addSqlParamsToRequest(params, request);\n  }\n  connection.execSql(request);\n});\nmodule.exports = promisifyTediousExecSql;\n\n//# sourceURL=webpack:///./src/promisifyTediousExecSql.js?");
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("/******/ (function(modules) { // webpackBootstrap\n/******/ \t// The module cache\n/******/ \tvar installedModules = {};\n/******/\n/******/ \t// The require function\n/******/ \tfunction __webpack_require__(moduleId) {\n/******/\n/******/ \t\t// Check if module is in cache\n/******/ \t\tif(installedModules[moduleId]) {\n/******/ \t\t\treturn installedModules[moduleId].exports;\n/******/ \t\t}\n/******/ \t\t// Create a new module (and put it into the cache)\n/******/ \t\tvar module = installedModules[moduleId] = {\n/******/ \t\t\ti: moduleId,\n/******/ \t\t\tl: false,\n/******/ \t\t\texports: {}\n/******/ \t\t};\n/******/\n/******/ \t\t// Execute the module function\n/******/ \t\tmodules[moduleId].call(module.exports, module, module.exports, __webpack_require__);\n/******/\n/******/ \t\t// Flag the module as loaded\n/******/ \t\tmodule.l = true;\n/******/\n/******/ \t\t// Return the exports of the module\n/******/ \t\treturn module.exports;\n/******/ \t}\n/******/\n/******/\n/******/ \t// expose the modules object (__webpack_modules__)\n/******/ \t__webpack_require__.m = modules;\n/******/\n/******/ \t// expose the module cache\n/******/ \t__webpack_require__.c = installedModules;\n/******/\n/******/ \t// define getter function for harmony exports\n/******/ \t__webpack_require__.d = function(exports, name, getter) {\n/******/ \t\tif(!__webpack_require__.o(exports, name)) {\n/******/ \t\t\tObject.defineProperty(exports, name, { enumerable: true, get: getter });\n/******/ \t\t}\n/******/ \t};\n/******/\n/******/ \t// define __esModule on exports\n/******/ \t__webpack_require__.r = function(exports) {\n/******/ \t\tif(typeof Symbol !== 'undefined' && Symbol.toStringTag) {\n/******/ \t\t\tObject.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });\n/******/ \t\t}\n/******/ \t\tObject.defineProperty(exports, '__esModule', { value: true });\n/******/ \t};\n/******/\n/******/ \t// create a fake namespace object\n/******/ \t// mode & 1: value is a module id, require it\n/******/ \t// mode & 2: merge all properties of value into the ns\n/******/ \t// mode & 4: return value when already ns object\n/******/ \t// mode & 8|1: behave like require\n/******/ \t__webpack_require__.t = function(value, mode) {\n/******/ \t\tif(mode & 1) value = __webpack_require__(value);\n/******/ \t\tif(mode & 8) return value;\n/******/ \t\tif((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;\n/******/ \t\tvar ns = Object.create(null);\n/******/ \t\t__webpack_require__.r(ns);\n/******/ \t\tObject.defineProperty(ns, 'default', { enumerable: true, value: value });\n/******/ \t\tif(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));\n/******/ \t\treturn ns;\n/******/ \t};\n/******/\n/******/ \t// getDefaultExport function for compatibility with non-harmony modules\n/******/ \t__webpack_require__.n = function(module) {\n/******/ \t\tvar getter = module && module.__esModule ?\n/******/ \t\t\tfunction getDefault() { return module['default']; } :\n/******/ \t\t\tfunction getModuleExports() { return module; };\n/******/ \t\t__webpack_require__.d(getter, 'a', getter);\n/******/ \t\treturn getter;\n/******/ \t};\n/******/\n/******/ \t// Object.prototype.hasOwnProperty.call\n/******/ \t__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };\n/******/\n/******/ \t// __webpack_public_path__\n/******/ \t__webpack_require__.p = \"\";\n/******/\n/******/\n/******/ \t// Load entry module and return exports\n/******/ \treturn __webpack_require__(__webpack_require__.s = \"./dist/index.js\");\n/******/ })\n/************************************************************************/\n/******/ ({\n\n/***/ \"./dist/index.js\":\n/*!***********************!*\\\n  !*** ./dist/index.js ***!\n  \\***********************/\n/*! no static exports found */\n/***/ (function(module, exports) {\n\neval(\"/******/ (function(modules) { // webpackBootstrap\\n/******/ \\t// The module cache\\n/******/ \\tvar installedModules = {};\\n/******/\\n/******/ \\t// The require function\\n/******/ \\tfunction __webpack_require__(moduleId) {\\n/******/\\n/******/ \\t\\t// Check if module is in cache\\n/******/ \\t\\tif(installedModules[moduleId]) {\\n/******/ \\t\\t\\treturn installedModules[moduleId].exports;\\n/******/ \\t\\t}\\n/******/ \\t\\t// Create a new module (and put it into the cache)\\n/******/ \\t\\tvar module = installedModules[moduleId] = {\\n/******/ \\t\\t\\ti: moduleId,\\n/******/ \\t\\t\\tl: false,\\n/******/ \\t\\t\\texports: {}\\n/******/ \\t\\t};\\n/******/\\n/******/ \\t\\t// Execute the module function\\n/******/ \\t\\tmodules[moduleId].call(module.exports, module, module.exports, __webpack_require__);\\n/******/\\n/******/ \\t\\t// Flag the module as loaded\\n/******/ \\t\\tmodule.l = true;\\n/******/\\n/******/ \\t\\t// Return the exports of the module\\n/******/ \\t\\treturn module.exports;\\n/******/ \\t}\\n/******/\\n/******/\\n/******/ \\t// expose the modules object (__webpack_modules__)\\n/******/ \\t__webpack_require__.m = modules;\\n/******/\\n/******/ \\t// expose the module cache\\n/******/ \\t__webpack_require__.c = installedModules;\\n/******/\\n/******/ \\t// define getter function for harmony exports\\n/******/ \\t__webpack_require__.d = function(exports, name, getter) {\\n/******/ \\t\\tif(!__webpack_require__.o(exports, name)) {\\n/******/ \\t\\t\\tObject.defineProperty(exports, name, { enumerable: true, get: getter });\\n/******/ \\t\\t}\\n/******/ \\t};\\n/******/\\n/******/ \\t// define __esModule on exports\\n/******/ \\t__webpack_require__.r = function(exports) {\\n/******/ \\t\\tif(typeof Symbol !== 'undefined' && Symbol.toStringTag) {\\n/******/ \\t\\t\\tObject.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });\\n/******/ \\t\\t}\\n/******/ \\t\\tObject.defineProperty(exports, '__esModule', { value: true });\\n/******/ \\t};\\n/******/\\n/******/ \\t// create a fake namespace object\\n/******/ \\t// mode & 1: value is a module id, require it\\n/******/ \\t// mode & 2: merge all properties of value into the ns\\n/******/ \\t// mode & 4: return value when already ns object\\n/******/ \\t// mode & 8|1: behave like require\\n/******/ \\t__webpack_require__.t = function(value, mode) {\\n/******/ \\t\\tif(mode & 1) value = __webpack_require__(value);\\n/******/ \\t\\tif(mode & 8) return value;\\n/******/ \\t\\tif((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;\\n/******/ \\t\\tvar ns = Object.create(null);\\n/******/ \\t\\t__webpack_require__.r(ns);\\n/******/ \\t\\tObject.defineProperty(ns, 'default', { enumerable: true, value: value });\\n/******/ \\t\\tif(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));\\n/******/ \\t\\treturn ns;\\n/******/ \\t};\\n/******/\\n/******/ \\t// getDefaultExport function for compatibility with non-harmony modules\\n/******/ \\t__webpack_require__.n = function(module) {\\n/******/ \\t\\tvar getter = module && module.__esModule ?\\n/******/ \\t\\t\\tfunction getDefault() { return module['default']; } :\\n/******/ \\t\\t\\tfunction getModuleExports() { return module; };\\n/******/ \\t\\t__webpack_require__.d(getter, 'a', getter);\\n/******/ \\t\\treturn getter;\\n/******/ \\t};\\n/******/\\n/******/ \\t// Object.prototype.hasOwnProperty.call\\n/******/ \\t__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };\\n/******/\\n/******/ \\t// __webpack_public_path__\\n/******/ \\t__webpack_require__.p = \\\"\\\";\\n/******/\\n/******/\\n/******/ \\t// Load entry module and return exports\\n/******/ \\treturn __webpack_require__(__webpack_require__.s = \\\"./dist/index.js\\\");\\n/******/ })\\n/************************************************************************/\\n/******/ ({\\n\\n/***/ \\\"./dist/index.js\\\":\\n/*!***********************!*\\\\\\n  !*** ./dist/index.js ***!\\n  \\\\***********************/\\n/*! no static exports found */\\n/***/ (function(module, exports, __webpack_require__) {\\n\\neval(\\\"!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){\\\\\\\"undefined\\\\\\\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\\\\\\\"Module\\\\\\\"}),Object.defineProperty(e,\\\\\\\"__esModule\\\\\\\",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&\\\\\\\"object\\\\\\\"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,\\\\\\\"default\\\\\\\",{enumerable:!0,value:e}),2&t&&\\\\\\\"string\\\\\\\"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,\\\\\\\"a\\\\\\\",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p=\\\\\\\"\\\\\\\",n(n.s=2)}([function(e,t){e.exports=__webpack_require__(/*! lodash */ \\\\\\\"lodash\\\\\\\")},function(e,t){e.exports=__webpack_require__(/*! tedious */ \\\\\\\"tedious\\\\\\\")},function(e,t,n){!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){\\\\\\\"undefined\\\\\\\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\\\\\\\"Module\\\\\\\"}),Object.defineProperty(e,\\\\\\\"__esModule\\\\\\\",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&\\\\\\\"object\\\\\\\"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,\\\\\\\"default\\\\\\\",{enumerable:!0,value:e}),2&t&&\\\\\\\"string\\\\\\\"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,\\\\\\\"a\\\\\\\",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p=\\\\\\\"\\\\\\\",n(n.s=6)}([function(e,t){e.exports=((e,t)=>{e.forEach(e=>{t.addParameter(e.name,e.type,e.value)})})},function(e,t,n){const r=n(5);e.exports=(e=>e.map(e=>e.reduce((e,t)=>({...e,[r.camelCase(t.metadata.colName)]:t.value}),{})))},function(e,t){e.exports=((e,t,n)=>({name:e,type:t,value:n}))},function(e,t){e.exports=n(1)},function(e,t,n){const r=n(3),o=n(1),u=n(0);e.exports=((e,t,n=null)=>new Promise((i,c)=>{const f=new r.Request(t,(e,t,n)=>{if(e)c(e);else{const e=o(n);i(e)}});n&&u(n,f),e.execSql(f)}))},function(e,t){e.exports=n(0)},function(e,t,n){const r=n(1),o=n(0),u=n(4),i=n(2);e.exports={mapReduceSqlRows:r,addSqlParamsToRequest:o,promisifyTediousExecSql:u,addParam:i}}])}]);\\\\n\\\\n//# sourceURL=webpack:///./dist/index.js?\\\");\\n\\n/***/ }),\\n\\n/***/ \\\"lodash\\\":\\n/*!*************************!*\\\\\\n  !*** external \\\"lodash\\\" ***!\\n  \\\\*************************/\\n/*! no static exports found */\\n/***/ (function(module, exports) {\\n\\neval(\\\"module.exports = require(\\\\\\\"lodash\\\\\\\");\\\\n\\\\n//# sourceURL=webpack:///external_%22lodash%22?\\\");\\n\\n/***/ }),\\n\\n/***/ \\\"tedious\\\":\\n/*!**************************!*\\\\\\n  !*** external \\\"tedious\\\" ***!\\n  \\\\**************************/\\n/*! no static exports found */\\n/***/ (function(module, exports) {\\n\\neval(\\\"module.exports = require(\\\\\\\"tedious\\\\\\\");\\\\n\\\\n//# sourceURL=webpack:///external_%22tedious%22?\\\");\\n\\n/***/ })\\n\\n/******/ });\\n\\n//# sourceURL=webpack:///./dist/index.js?\");\n\n/***/ })\n\n/******/ });\n\n//# sourceURL=webpack:///./dist/index.js?");
+eval("module.exports = require(\"lodash\");\n\n//# sourceURL=webpack:///external_%22lodash%22?");
+
+/***/ }),
+
+/***/ "tedious":
+/*!**************************!*\
+  !*** external "tedious" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"tedious\");\n\n//# sourceURL=webpack:///external_%22tedious%22?");
 
 /***/ })
 
