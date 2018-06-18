@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/addParams.js"],"names":["module","exports","name","type","value"],"mappings":";;AACAA,OAAOC,OAAP,GAAiB,UAACC,IAAD,EAAOC,IAAP,EAAaC,KAAb;AAAA,SAAwB;AACvCF,cADuC;AAEvCC,cAFuC;AAGvCC;AAHuC,GAAxB;AAAA,CAAjB","file":"addParams.js","sourcesContent":["\nmodule.exports = (name, type, value) => ({\n  name,\n  type,\n  value,\n});\n"]}
