@@ -1,6 +1,6 @@
 {
   "name": "@stationfive/tedious-ext",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "Extensions for tedious.js",
   "main": "dist/index.js",
   "files": [
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reggiepangilinan-s5/s5-tedious-ext.git"
+    "url": "git+https://github.com/stationfive/s5-tedious-ext.git"
   },
   "keywords": [
     "tedious.js",
@@ -25,9 +25,9 @@
   "author": "StationFive",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reggiepangilinan-s5/s5-tedious-ext/issues"
+    "url": "https://github.com/stationfive/s5-tedious-ext/issues"
   },
-  "homepage": "https://github.com/reggiepangilinan-s5/s5-tedious-ext#readme",
+  "homepage": "https://github.com/stationfive/s5-tedious-ext#readme",
   "dependencies": {
     "lodash": "4.17.10",
     "tedious": "2.6.1"
