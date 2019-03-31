@@ -2,25 +2,31 @@ const sql = require('tedious');
 const mapReduceSqlRows = require('./mapReduceSqlRows');
 const addSqlParamsToRequest = require('./addSqlParamsToRequest');
 
-const promisifyTediousExecSql = (connection, query, params = null) =>
-  new Promise(((resolve, reject) => {
-    connection.on('connect', (error) => {
-      if (error) {
-        reject(error);
-      }
+function callback(connection, resolve, reject) {
+  return (err, rowCount, rows) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(mapReduceSqlRows(rows));
+    }
 
-      const sqlCallback = (err, rowCount, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          const results = mapReduceSqlRows(rows);
-          resolve(results);
-        }
-      };
+    connection.release();
+  };
+}
+
+function promisifyTediousExecSql(pool, query, params = null) {
+  return new Promise((resolve, reject) => {
+    pool.on('error', err => reject(err));
+
+    pool.acquire((err, connection) => {
+      if (err) {
+        reject(err);
+        connection.release();
+      }
 
       const request = new sql.Request(
         query,
-        sqlCallback,
+        callback(connection, resolve, reject),
       );
 
       if (params) {
@@ -29,6 +35,7 @@ const promisifyTediousExecSql = (connection, query, params = null) =>
 
       connection.execSql(request);
     });
-  }));
+  });
+}
 
 module.exports = promisifyTediousExecSql;

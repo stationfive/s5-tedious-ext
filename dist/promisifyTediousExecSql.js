@@ -10,24 +10,33 @@ var sql = require('tedious');
 var mapReduceSqlRows = require('./mapReduceSqlRows');
 var addSqlParamsToRequest = require('./addSqlParamsToRequest');
 
-var promisifyTediousExecSql = function promisifyTediousExecSql(connection, query) {
+function callback(connection, resolve, reject) {
+  return function (err, rowCount, rows) {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(mapReduceSqlRows(rows));
+    }
+
+    connection.release();
+  };
+}
+
+function promisifyTediousExecSql(pool, query) {
   var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
   return new _promise2.default(function (resolve, reject) {
-    connection.on('connect', function (error) {
-      if (error) {
-        reject(error);
+    pool.on('error', function (err) {
+      return reject(err);
+    });
+
+    pool.acquire(function (err, connection) {
+      if (err) {
+        reject(err);
+        connection.release();
       }
 
-      var sqlCallback = function sqlCallback(err, rowCount, rows) {
-        if (err) {
-          reject(err);
-        } else {
-          var results = mapReduceSqlRows(rows);
-          resolve(results);
-        }
-      };
-
-      var request = new sql.Request(query, sqlCallback);
+      var request = new sql.Request(query, callback(connection, resolve, reject));
 
       if (params) {
         addSqlParamsToRequest(params, request);
@@ -36,7 +45,7 @@ var promisifyTediousExecSql = function promisifyTediousExecSql(connection, query
       connection.execSql(request);
     });
   });
-};
+}
 
 module.exports = promisifyTediousExecSql;
 //# sourceMappingURL=promisifyTediousExecSql.js.map

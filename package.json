@@ -1,6 +1,6 @@
 {
   "name": "@stationfive/tedious-ext",
-  "version": "0.0.6",
+  "version": "0.0.15",
   "description": "Extensions for tedious.js",
   "main": "dist/index.js",
   "files": [
